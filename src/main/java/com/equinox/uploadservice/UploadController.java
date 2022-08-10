@@ -1,11 +1,11 @@
 package com.equinox.uploadservice;
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -14,10 +14,15 @@ import reactor.core.publisher.Mono;
 public class UploadController {
 
     @Autowired
-    FileUploadService fileUploadService;
+    FileUploadServiceImpl fileUploadService;
 
-    @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(value = "/upload")
     public Mono<ServerResponse> upload(@RequestPart("file") Mono<FilePart> filePartMono) {
-        return Mono.empty();
+        return Mono.create(monoSink -> {
+                var path = "/Users/sahak1an/IdeaProjects/upload-service/src/main/resources/application.properties";
+
+                fileUploadService.upload(new File(path));
+            })
+            .flatMap(aBoolean -> ServerResponse.ok().build());
     }
 }
