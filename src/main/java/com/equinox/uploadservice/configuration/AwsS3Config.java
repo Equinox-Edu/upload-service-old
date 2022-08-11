@@ -1,4 +1,6 @@
-package com.equinox.uploadservice;
+package com.equinox.uploadservice.configuration;
+
+import static com.amazonaws.regions.Regions.*;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,17 +19,14 @@ public class AwsS3Config {
     @Value("${awsSecret:#{environment.AWS_SECRET_ACCESS_KEY}}")
     private String accessKeySecret;
 
-    @Value("${awsRegion:eu-central-1")
-    private String s3RegionName;
-
     @Bean
     public AmazonS3 getAmazonS3Client() {
-        final BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+        final var basicAwsCredentials = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 
         return AmazonS3ClientBuilder
             .standard()
             .withCredentials(new AWSStaticCredentialsProvider(basicAwsCredentials))
-            .withRegion(Regions.EU_CENTRAL_1)
+            .withRegion(EU_CENTRAL_1)
             .build();
     }
 }
