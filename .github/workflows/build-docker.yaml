@@ -24,6 +24,7 @@ jobs:
       - name: docker push
         run: |
           docker tag eqx/upload-service:latest ghcr.io/equinox-edu/upload-service:latest
+          docker push ghcr.io/equinox-edu/upload-service:latest
 
 
 
