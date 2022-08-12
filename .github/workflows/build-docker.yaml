@@ -1,0 +1,29 @@
+name: Build docker image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-image:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: login ghcr
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v3
+
+      - name: docker build
+        run: docker build -t eqx/upload-service:latest .
+
+      - name: docker push
+        run: |
+          docker tag eqx/upload-service:latest ghcr.io/equinox-edu/upload-service:latest
+
+
+
